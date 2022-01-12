@@ -7,10 +7,55 @@ import heapq
 # return:
 #   a dictionary mapping object -> binary encoding
 
-def createDictionary(pList):
+class TreeNode:
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+  def insert(self, char):
+    if char == '(':
+        if self.left is None:
+            self.left = TreeNode(char)
+        elif self.left.val == '(':
+            self.left.insert(char)
+        elif self.right is None:
+            self.right = TreeNode(char)
+        elif self.right.val == '(':
+            self.right.insert(char)
+
+    elif char == ')':
+        if self.left.val == '(':
+            self.left.insert(char)
+        elif self.right.val == '(':
+            self.right.insert(char)
+        else:
+            self.val = self.val + char
+    else:
+        if self.left is None:
+            self.left = TreeNode(char)
+        if self.left.val == '(':
+            self.left.insert(char)
+        if self.right is None:
+            self.right = TreeNode(char)
+        elif self.right.val == '(':
+            self.right.insert(char)
     
 
-    pass
+
+
+
+def createDictionary(pList):
+    if len(pList) == 0:
+        return {}
+
+    encoding = {}
+    root = TreeNode(pList[0])
+    for char in pList[1:]:
+        if char != '^':
+            root.insert(char)
+    return encoding
+
 def huffman(pList):
     """
     Example:
@@ -32,7 +77,7 @@ def huffman(pList):
         heapq.heappush(tests, [combinedProb, symbol])
 
     print(tests)
-
+    createDictionary(tests[0][1])
     return tests
 
 def main(plist):
