@@ -9,6 +9,14 @@ from PS1_1 import huffman
 #   encoded_message -- a numpy array of 0's and 1's representing the encoded message
 # return:
 #   a list of decoded symbols
+
+def reverseDict(encoding_dict):
+       newDict = {}
+       for key, value in encoding_dict.items():
+              newKey = "".join(value)
+              newDict[newKey] = key
+       return newDict
+
 def decode(encoding_dict,encoded_message):
     """
     Example:
@@ -17,7 +25,17 @@ def decode(encoding_dict,encoded_message):
     returns 'ABCD'
     """
     # Your code here
-    pass
+    message = []
+    tempDict = reverseDict(encoding_dict)
+
+    currentSymbol = ""
+    for symbol in encoded_message:
+           currentSymbol += symbol
+           if currentSymbol in tempDict:
+                  message.append(tempDict[currentSymbol])
+                  currentSymbol = ""
+
+    return message
 
 
 if __name__ == '__main__':
@@ -34,11 +52,11 @@ if __name__ == '__main__':
            (message,decoded_message)
 
     # test case 2: construct a random message and encode it
-    message = [random.choice('ABCD') for i in xrange(100)]
+    message = [random.choice('ABCD') for i in range(100)]
     encoded_message = PS1_tests.encode(cdict,message)
     decoded_message = decode(cdict,encoded_message)
     assert message == decoded_message, \
            "Decoding failed: expected %s, got %s" % \
            (message,decoded_message)
 
-    print "Tests passed!"
+    print ("Tests passed!")

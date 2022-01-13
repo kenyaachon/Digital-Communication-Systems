@@ -46,7 +46,7 @@ def printTree(root: TreeNode, encoding, encodingTree):
         return 
     if root.left is None and root.right is None:
         print(encoding)
-        encodingTree[root.val] = encoding
+        encodingTree[root.val] = list(encoding)
         return
 
 
@@ -62,17 +62,11 @@ def createDictionary(pList):
 
     encoding = {}
     symbols = pList.split(" ")
-    # root = TreeNode(pList[0])
-    # for char in pList[1:]:
     root = TreeNode(symbols[0])
     for char in symbols[1:]:
         if char != '^':
-            print(char)
+            # print(char)
             root.insert(char)
-        # if char == '(' or char == ')':
-        #     print(char)
-        #     root.insert(char)
-        # elif char != '^':
 
 
     printTree(root, "", encoding)
@@ -97,14 +91,16 @@ def huffman(pList):
         symbol = '(' + " " + second[1] + " " + '^' + " " + first[1] +  " " + ')'
 
         heapq.heappush(tests, [combinedProb, symbol])
-    print(tests)
-    return tests
+    # print(tests)
+
+    return createDictionary(tests[0][1])
 
 def main(plist):
     # encoding = "((J^X)^(Q^(A^K)))"
     # print(encoding.split("^"))
-    tests = huffman(plist)
-    print(createDictionary(tests[0][1]))
+    # tests = huffman(plist)
+    # print(createDictionary(tests[0][1]))
+    print(huffman(plist))
 
 
 
@@ -148,14 +144,15 @@ if __name__ == '__main__':
     #                         (1,'VI'),(3,'X'),(3,'XVI')))
 
     # # test case 4: 3 flips of unfair coin
-    # phead = 0.9
-    # plist = []
-    # for flip1 in ('H','T'):
-    #     p1 = phead if flip1 == 'H' else 1-phead
-    #     for flip2 in ('H','T'):
-    #         p2 = phead if flip2 == 'H' else 1-phead
-    #         for flip3 in ('H','T'):
-    #             p3 = phead if flip3 == 'H' else 1-phead
-    #             plist.append((p1*p2*p3,flip1+flip2+flip3))
+    phead = 0.9
+    plist = []
+    for flip1 in ('H','T'):
+        p1 = phead if flip1 == 'H' else 1-phead
+        for flip2 in ('H','T'):
+            p2 = phead if flip2 == 'H' else 1-phead
+            for flip3 in ('H','T'):
+                p3 = phead if flip3 == 'H' else 1-phead
+                plist.append((p1*p2*p3,flip1+flip2+flip3))
     # expected_sizes = ((1,'HHH'),(3,'HTH'),(5,'TTT'))
     # PS1_tests.test_huffman(huffman,plist,expected_sizes)
+    main(plist)
