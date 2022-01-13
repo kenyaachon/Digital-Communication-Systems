@@ -61,10 +61,19 @@ def createDictionary(pList):
         return {}
 
     encoding = {}
-    root = TreeNode(pList[0])
-    for char in pList[1:]:
+    symbols = pList.split(" ")
+    # root = TreeNode(pList[0])
+    # for char in pList[1:]:
+    root = TreeNode(symbols[0])
+    for char in symbols[1:]:
         if char != '^':
+            print(char)
             root.insert(char)
+        # if char == '(' or char == ')':
+        #     print(char)
+        #     root.insert(char)
+        # elif char != '^':
+
 
     printTree(root, "", encoding)
     return encoding
@@ -85,9 +94,10 @@ def huffman(pList):
         second = heapq.heappop(tests)
 
         combinedProb = first[0] + second[0]
-        symbol = '(' + second[1] + '^' + first[1] + ')'
+        symbol = '(' + " " + second[1] + " " + '^' + " " + first[1] +  " " + ')'
 
         heapq.heappush(tests, [combinedProb, symbol])
+    print(tests)
     return tests
 
 def main(plist):
@@ -106,10 +116,10 @@ if __name__ == '__main__':
     # main(((0.25,'A'),(0.25,'B'),(0.25,'C'), (0.25,'D')))
 
 
-    # main(((0.34,'A'),(0.5,'B'),(0.08,'C'),(0.08,'D')))
+    main(((0.34,'A'),(0.5,'B'),(0.08,'C'),(0.08,'D')))
     # # test case 1: four symbols with equal probability
 
-    main(((0.25,'A'),(0.25,'B'),(0.25,'C'),(0.25,'D')))
+    # main(((0.25,'A'),(0.25,'B'),(0.25,'C'),(0.25,'D')))
 
     # main(((0.07,'I'),(0.23,'II'),(0.07,'III'), (0.38,'VI'),(0.13,'X'),(0.12,'XVI')))
 
