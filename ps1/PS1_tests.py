@@ -149,7 +149,7 @@ def pixels2img(pixels,nrows,ncols):
 
 # convert pixel vector into run-length vector
 def pixels2runs(bw,maxrun=2**31):
-    result = numpy.zeros(bw.size/2,dtype=int)  # worst case: alternating pixels
+    result = numpy.zeros(int(bw.size/2),dtype=int)  # worst case: alternating pixels
     index = 0
     color = 1
     run = 0

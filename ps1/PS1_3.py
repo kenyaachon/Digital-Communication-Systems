@@ -2,7 +2,7 @@
 import matplotlib.pyplot as p
 import numpy,os
 import PS1_tests
-from PS1_1 import huffman
+from PS1_1 import huffman, huffman2
 from PS1_2 import decode
 
 if __name__ == '__main__':
@@ -38,7 +38,8 @@ if __name__ == '__main__':
 
     # Experiment 1: Huffman-encoding run lengths
     cdict = huffman(plist)
-    encoded_runs = numpy.concatenate([cdict[r] for r in runs])
+    encoded_runs = numpy.concatenate([cdict[str(r)] for r in runs])
+
     print ("\nExperiment 1:")
     print ("  bits when Huffman-encoding runs:",\
           len(encoded_runs))
@@ -52,7 +53,7 @@ if __name__ == '__main__':
     plist_black = PS1_tests.histogram(runs[1::2])
     cblack = huffman(plist_black)
     encoded_runs = numpy.concatenate(
-        [cwhite[runs[i]] if (i & 1) == 0 else cblack[runs[i]]
+        [cwhite[str(runs[i])] if (i & 1) == 0 else cblack[str(runs[i])]
          for i in range(len(runs))])
     print ("\nExperiment 2:")
     print ("  bits when Huffman-encoding runs by color:",\
@@ -70,8 +71,8 @@ if __name__ == '__main__':
     # where each pair is (white run,black run)
     pairs = [(runs[i],runs[i+1]) for i in range(0,len(runs),2)]
     plist_pairs = PS1_tests.histogram(pairs)
-    cpair = huffman(plist_pairs)
-    encoded_pairs = numpy.concatenate([cpair[pair]
+    cpair = huffman2(plist_pairs)
+    encoded_pairs = numpy.concatenate([cpair[str(pair[0])]
                                        for pair in pairs])
     print ("\nExperiment 3:")
     print ("  bits when Huffman-encoding run pairs:",\
@@ -85,7 +86,7 @@ if __name__ == '__main__':
     blocks = PS1_tests.pixels2blocks(pixels,nrows,ncols,4,4)
     plist_blocks = PS1_tests.histogram(blocks)
     cblock = huffman(plist_blocks)
-    encoded_blocks = numpy.concatenate([cblock[b] for b in blocks])
+    encoded_blocks = numpy.concatenate([cblock[str(b)] for b in blocks])
     print ("\nExperiment 4:")
     print ("  bits when Huffman-encoding 4x4 image blocks:",\
           len(encoded_blocks))

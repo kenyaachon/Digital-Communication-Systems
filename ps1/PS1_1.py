@@ -41,17 +41,17 @@ class TreeNode:
         elif self.right.val == '(':
             self.right.insert(char)
     
-def printTree(root: TreeNode, encoding, encodingTree):
+def printTree(root, encoding, encodingTree):
     if root is None:
         return 
     if root.left is None and root.right is None:
-        print(encoding)
+        # print(encoding)
         encodingTree[root.val] = list(encoding)
         return
 
 
     printTree(root.left, encoding + "0", encodingTree)
-    print(root.val)
+    # print(root.val)
     printTree(root.right, encoding + "1", encodingTree)
 
 
@@ -72,6 +72,29 @@ def createDictionary(pList):
     printTree(root, "", encoding)
     return encoding
 
+# def huffman(pList):
+#     """
+#     Example:
+#     plist: ((0.50,'A'),(0.25,'B'),(0.125,'C'),(0.125,'D'))
+#     returns: {'A': [0], 'B': [1, 0], 'C': [1, 1, 0], 'D': [1, 1, 1]} 
+#     """
+#     # Your Code Here
+#     tests = []
+#     for value in pList:
+#         heapq.heappush(tests, [value[0], value[1]])
+    
+#     while len(tests) > 1:
+#         first = heapq.heappop(tests)
+#         second = heapq.heappop(tests)
+
+#         combinedProb = first[0] + second[0]
+#         symbol = '(' + " " + second[1] + " " + '^' + " " + first[1] +  " " + ')'
+
+#         heapq.heappush(tests, [combinedProb, symbol])
+#     # print(tests)
+
+#     return createDictionary(tests[0][1])
+
 def huffman(pList):
     """
     Example:
@@ -81,17 +104,46 @@ def huffman(pList):
     # Your Code Here
     tests = []
     for value in pList:
-        heapq.heappush(tests, [value[0], value[1]])
-    
+        heapq.heappush(tests, [value[0], value[1]]) 
+        # print("probabily value", type(value[0]))
+        # print("encoding", type(value[1]))   
+
+
     while len(tests) > 1:
         first = heapq.heappop(tests)
         second = heapq.heappop(tests)
 
         combinedProb = first[0] + second[0]
-        symbol = '(' + " " + second[1] + " " + '^' + " " + first[1] +  " " + ')'
+        symbol = '(' + " " + str(second[1]) + " " + '^' + " " + str(first[1]) +  " " + ')'
 
         heapq.heappush(tests, [combinedProb, symbol])
-    # print(tests)
+
+    return createDictionary(tests[0][1])
+
+def huffman2(pList):
+    """
+    Example:
+    plist: ((0.50,'A'),(0.25,'B'),(0.125,'C'),(0.125,'D'))
+    returns: {'A': [0], 'B': [1, 0], 'C': [1, 1, 0], 'D': [1, 1, 1]} 
+
+    this one works for pairs
+    """
+    # Your Code Here
+    tests = []
+    for value in pList:
+        heapq.heappush(tests, [value[0], value[1][0]]) 
+        # print("probabily value", type(value[0]))
+        # print("encoding", type(value[1]))   
+
+
+    while len(tests) > 1:
+        first = heapq.heappop(tests)
+        second = heapq.heappop(tests)
+
+        combinedProb = first[0] + second[0]
+        symbol = '(' + " " + str(second[1]) + " " + '^' + " " + str(first[1]) +  " " + ')'
+
+        heapq.heappush(tests, [combinedProb, symbol])
 
     return createDictionary(tests[0][1])
 
@@ -153,6 +205,6 @@ if __name__ == '__main__':
             for flip3 in ('H','T'):
                 p3 = phead if flip3 == 'H' else 1-phead
                 plist.append((p1*p2*p3,flip1+flip2+flip3))
-    # expected_sizes = ((1,'HHH'),(3,'HTH'),(5,'TTT'))
-    # PS1_tests.test_huffman(huffman,plist,expected_sizes)
+    expected_sizes = ((1,'HHH'),(3,'HTH'),(5,'TTT'))
+    PS1_tests.test_huffman(huffman,plist,expected_sizes)
     main(plist)
