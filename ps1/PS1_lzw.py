@@ -1,15 +1,16 @@
-# template file for 6.02 PS1, Python Task 4 (LZW Compression/Decompression)
 import sys
 from optparse import OptionParser
 import struct
 import array
 
+###Key Note: this works best with Python 2.7, otherwise Python 3.9 causes
+###an encoding error
+####
+
 
 def initializeArray():
     table = []
     for i in range(256):
-        # table[i] = chr(i)
-        # table[chr(i)] = i
         table.append(chr(i))
 
     return table
@@ -27,36 +28,22 @@ def compress(filename):
         with open(filename, 'rb') as file:
             #read one byte at a time when compressing a file
             with open(outputName, 'wb') as outFile:
-                # string = array.array("B", file.read())
-                # symbol = array.array("B", file.read())
-                # while symbol:
-                # while symbol != '10':
-                #     if string + symbol in table:
-                #         string = string + symbol
-                #         print(string)
-                #     else:
-                #         # outFile.write(table.index(string))
-                #         table.append(string + symbol)
-                #         string = symbol
-                #     symbol = array.array("B", file.read())
-                # outFile.write(table.index(string))
 
                 compressed = array.array("B", file.read())
                 string = chr(compressed[0])
-                for symbol in compressed[1:]:
-                    symbol = chr(symbol)
-                    print(string + symbol)
+                for code in compressed[1:]:
+                    symbol = chr(code)
                     if string + symbol in table:
                         string = string + symbol
-                        print(string)
                     else:
-                        outFile.write(table.index(string).to_bytes(2, 'little'))
+                        outFile.write(struct.pack("<H", table.index(string)))
                         table.append(string + symbol)
                         string = symbol
-                outFile.write(table.index(string).to_bytes(2, 'little'))
+                outFile.write(struct.pack("<H", table.index(string)))
 
 
-    except FileNotFoundError:
+    # except FileNotFoundError:
+    except IOError:
         print ("This File %s does not exist", filename)
 
 def uncompress(filename):
@@ -77,7 +64,6 @@ def uncompress(filename):
                 compressed = array.array("H", file.read())
                 string = table[compressed[0]]
                 outFile.write(string)
-                # print(compressed)
                 entry = ""
                 for code in compressed[1:]:
                     if code >= len(table):
@@ -87,6 +73,7 @@ def uncompress(filename):
                     outFile.write(entry)
                     table.append(string+entry[0])
                     string = entry
+                print(len(table))
     except FileNotFoundError:
         print("This file %s does not exist", filename)
 
