@@ -1,5 +1,6 @@
 # 6.02 PS: Syndrome decoding of a linear block code
 from numpy import *
+import numpy
 import PS2_tests
 
 # Replace each entry of a matrix A with its modulo 2 value 
@@ -23,6 +24,32 @@ def equal(a, b):
 # in the template; you can preserve that, or change it as you wish.
 def syndrome_decode(codeword, n, k, G):
     ## YOUR CODE HERE
+    # print(codeword)
+    A = G[:, k:n+1]
+    # print("A", A)
+    # print("G", G)
+    I = numpy.identity(n-k)
+    Atransposed = A.getT()
+    H = numpy.concatenate((Atransposed, I), axis=1)
+    # print("H", H)
+    CodewordTransposed = codeword.transpose()
+    # print("CodewordTransposed", CodewordTransposed)
+    result = numpy.dot(H, CodewordTransposed)
+    mod2Result = mod2(result)
+
+    # print(mod2Result)
+
+    if equal([0*k], mod2Result):
+        return codeword[:k]
+    ##find the correct syndrome if there is one that exists
+    for i in range(n):
+        Hcolumn = H[:, i]
+        if equal(Hcolumn.transpose(), mod2Result):
+            # print(mod2Result)
+            # print("we found an error at bit", i)
+            copy = codeword
+            copy[i] ^= 1
+            return copy[:k]
     return codeword[:k]
 
 if __name__ == '__main__':
