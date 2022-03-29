@@ -11,8 +11,10 @@ class SoftViterbiDecoder(ViterbiDecoder):
     # expected and received voltages.
     def branch_metric(self,expected,received):
         #your code here
-        pass
-
+        distance = 0
+        for bit in xrange(self.r):
+            distance += (expected[bit] - received[bit]) ** 2
+        return distance
 if __name__=='__main__':
     # Test whether branch metrics are as expected
     PS3_tests.test_soft_metrics(SoftViterbiDecoder)
